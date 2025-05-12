@@ -1,0 +1,26 @@
+{
+  "endOfLine": "lf",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "importOrder": [
+    "^react$",
+    "^react-native$",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^[.]",
+    "^[~]",
+    "",
+    "<TYPES>"
+  ],
+  "importOrderTypeScriptVersion": "5.5.4"
+}
