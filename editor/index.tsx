@@ -1,11 +1,42 @@
 import React from 'react';
-import { createEditor, Descendant } from 'slate';
+import { BaseEditor, createEditor, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
-import { Editable, Slate, withReact } from 'slate-react';
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 
 import { CustomEditorLeaf, CustomEditorRenderElement } from './editorElements';
 import { Toolbar } from './toolbar';
 import { cn, CustomEditorHelper, serializeHtml } from './utils';
+
+export type CustomEditorElementType = 'paragraph' | 'code' | 'image';
+
+export type CustomEditorElementBase = {
+  children: CustomEditorTextElement[];
+};
+
+export type ParagraphElement = CustomEditorElementBase & {
+  type: 'paragraph';
+};
+
+export type CodeElement = CustomEditorElementBase & {
+  type: 'code';
+};
+
+export type ImageElement = CustomEditorElementBase & {
+  type: 'image';
+  url: string;
+};
+
+export type CustomEditorElement = ParagraphElement | CodeElement | ImageElement;
+
+export type CustomEditorTextElement = { text?: string; bold?: boolean };
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor;
+    Element: CustomEditorElement;
+    Text: CustomEditorTextElement;
+  }
+}
 
 type JSONExportMode = {
   mode: 'json';

@@ -3,7 +3,7 @@ import { Editor, Element, Text, Transforms } from 'slate';
 import { jsx } from 'slate-hyperscript';
 import { twMerge } from 'tailwind-merge';
 
-import type { CustomEditorElementType, CustomEditorTextElement } from './types';
+import type { CustomEditorElementType, CustomEditorTextElement } from '.';
 import type { ClassValue } from 'clsx';
 import type { Descendant, Node as SlateNode } from 'slate';
 import type { ReactEditor } from 'slate-react';
