@@ -10,7 +10,7 @@ type ToolbarProps = {
 
 export function Toolbar({ editor }: ToolbarProps) {
   return (
-    <div className="m-2 flex flex-row rounded border border-slate-300 p-1">
+    <div className="mb-2 flex flex-row rounded border border-slate-300 p-1">
       <button
         className="cursor-pointer p-1 hover:bg-slate-300"
         onClick={() => CustomEditorHelper.toggleBoldMark(editor)}

@@ -133,8 +133,9 @@ function breakdownElements(
         const url = element.getAttribute('src');
 
         return [
+          jsx('element', { type: 'paragraph' }, [jsx('text', {}, '')]),
           jsx('element', { ...nodeAttributes, type: 'image', url }, children),
-          jsx('element', nodeAttributes, children),
+          jsx('element', { type: 'paragraph' }, [jsx('text', {}, '')]),
         ];
       }
 

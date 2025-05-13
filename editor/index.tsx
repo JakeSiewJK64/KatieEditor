@@ -89,10 +89,7 @@ export function RichTextEditor({
       <Toolbar editor={editor} />
       <Editable
         {...props}
-        className={cn(
-          'm-2 rounded border border-slate-300 p-1',
-          props.className,
-        )}
+        className={cn('rounded border border-slate-300 p-1', props.className)}
         renderLeaf={CustomEditorLeaf}
         renderElement={CustomEditorRenderElement}
         onPaste={async e => {
