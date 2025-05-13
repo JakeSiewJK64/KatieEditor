@@ -13,12 +13,8 @@ export type CustomEditorElementBase = {
   children: CustomEditorTextElement[];
 };
 
-export type ParagraphElement = CustomEditorElementBase & {
-  type: 'paragraph';
-};
-
-export type CodeElement = CustomEditorElementBase & {
-  type: 'code';
+export type StandardElement = CustomEditorElementBase & {
+  type: 'code' | 'paragraph';
 };
 
 export type ImageElement = CustomEditorElementBase & {
@@ -26,7 +22,7 @@ export type ImageElement = CustomEditorElementBase & {
   url: string;
 };
 
-export type CustomEditorElement = ParagraphElement | CodeElement | ImageElement;
+export type CustomEditorElement = ImageElement | StandardElement;
 
 export type CustomEditorTextElement = { text?: string; bold?: boolean };
 
