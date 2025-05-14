@@ -1,11 +1,12 @@
-import { LuBold } from 'react-icons/lu';
+import { LuBold, LuRedo, LuUndo } from 'react-icons/lu';
+import { HistoryEditor } from 'slate-history';
 
 import { CustomEditorHelper } from './utils';
 
 import type { ReactEditor } from 'slate-react';
 
 type ToolbarProps = {
-  editor: ReactEditor;
+  editor: ReactEditor & HistoryEditor;
 };
 
 export function Toolbar({ editor }: ToolbarProps) {
@@ -16,6 +17,18 @@ export function Toolbar({ editor }: ToolbarProps) {
         onClick={() => CustomEditorHelper.toggleBoldMark(editor)}
       >
         <LuBold />
+      </button>
+      <button
+        className="cursor-pointer p-1 hover:bg-slate-300"
+        onClick={() => editor.undo()}
+      >
+        <LuUndo />
+      </button>
+      <button
+        className="cursor-pointer p-1 hover:bg-slate-300"
+        onClick={() => editor.redo()}
+      >
+        <LuRedo />
       </button>
     </div>
   );
