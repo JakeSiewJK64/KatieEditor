@@ -59,11 +59,12 @@ export const CustomEditorHelper = {
 
     editor.addMark('bold', true);
   },
-  insertImage(editor: ReactEditor, url: string) {
+  insertImage(editor: ReactEditor, url: string, width?: number) {
     const image: SlateNode & ImageElement = {
       type: 'image',
       children: [{ text: '' }],
       url,
+      width,
     };
     Transforms.insertNodes(editor, image);
     Transforms.insertNodes(editor, {
@@ -134,21 +135,22 @@ function breakdownElements(
       return [jsx('element', nodeAttributes, children)];
     case 'IMG':
       if (element instanceof HTMLImageElement) {
-        const url = element.getAttribute('src');
+        const url = element.getAttribute('src') || '';
         const width = element.getAttribute('width') || '300';
 
         return [
-          jsx('element', { type: 'paragraph' }, [jsx('text', {}, '')]),
-          jsx(
-            'element',
-            { ...nodeAttributes, type: 'image', url, width: Number(width) },
-            children,
-          ),
-          jsx('element', { type: 'paragraph' }, [jsx('text', {}, '')]),
+          jsx('element', { type: 'paragraph' }, [{ text: '' }]),
+          {
+            type: 'image',
+            url,
+            width: Number(width),
+            children: [{ text: '' }],
+          },
+          jsx('element', { type: 'paragraph' }, [{ text: '' }]),
         ];
       }
 
-      return [jsx('element', nodeAttributes, children)];
+      return [{ text: '' }];
     default:
       return children;
   }

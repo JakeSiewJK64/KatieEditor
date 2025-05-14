@@ -1,11 +1,13 @@
 import React from 'react';
-import { BaseEditor, createEditor, Descendant } from 'slate';
+import { BaseEditor, createEditor, Descendant, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 
 import { CustomEditorLeaf, CustomEditorRenderElement } from './editorElements';
 import { Toolbar } from './toolbar';
 import { cn, CustomEditorHelper, serializeHtml } from './utils';
+
+import type { Path } from 'slate';
 
 export type CustomEditorElementType = 'paragraph' | 'code' | 'image';
 
@@ -89,6 +91,19 @@ export function RichTextEditor({
         className={cn('rounded border border-slate-300 p-1', props.className)}
         renderLeaf={CustomEditorLeaf}
         renderElement={CustomEditorRenderElement}
+        onDrop={e => {
+          const imgSrc = e.dataTransfer.getData('data-img');
+
+          if (imgSrc) {
+            const {
+              nodeIndex,
+              url,
+              width,
+            }: ImageElement & { nodeIndex: Path } = JSON.parse(imgSrc);
+            Transforms.removeNodes(editor, { at: nodeIndex });
+            CustomEditorHelper.insertImage(editor, url, width);
+          }
+        }}
         onPaste={async e => {
           const clipboardData = e.clipboardData;
           const items = clipboardData?.items;

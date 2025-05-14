@@ -27,8 +27,10 @@ export function CustomEditorLeaf(props: RenderLeafProps) {
 function CustomImageRenderElement({
   onDelete = () => {},
   onSizeChange = () => {},
+  onDragStart = () => {},
   ...props
 }: ImageElement & {
+  onDragStart: (e: React.DragEvent) => void;
   onDelete: () => void;
   onSizeChange: (newSize: number) => void;
 }) {
@@ -76,7 +78,7 @@ function CustomImageRenderElement({
           <LuTrash />
         </button>
       </div>
-      <img width={size} draggable={false} src={props.url} />
+      <img width={size} src={props.url} onDragStart={onDragStart} />
     </div>
   );
 }
@@ -91,24 +93,34 @@ export function CustomEditorRenderElement(props: RenderElementProps) {
           <code className="text-red-600">{props.children}</code>
         </pre>
       );
-    case 'image':
+    case 'image': {
+      const nodeIndex = ReactEditor.findPath(editor, props.element);
+
       return (
         <CustomImageRenderElement
           {...props.element}
+          onDragStart={e => {
+            e.dataTransfer.setData('text/plain', '');
+            e.dataTransfer.setData(
+              'data-img',
+              JSON.stringify({ ...props.element, nodeIndex }),
+            );
+          }}
           onSizeChange={newSize => {
             Transforms.setNodes(
               editor,
               { ...props, width: newSize },
-              { at: ReactEditor.findPath(editor, props.element) },
+              { at: nodeIndex },
             );
           }}
           onDelete={() => {
             Transforms.removeNodes(editor, {
-              at: ReactEditor.findPath(editor, props.element),
+              at: nodeIndex,
             });
           }}
         />
       );
+    }
     default:
       return <p {...props}>{props.children}</p>;
   }
