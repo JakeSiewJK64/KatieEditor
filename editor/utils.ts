@@ -3,7 +3,11 @@ import { Editor, Element, Text, Transforms } from 'slate';
 import { jsx } from 'slate-hyperscript';
 import { twMerge } from 'tailwind-merge';
 
-import type { CustomEditorElementType, CustomEditorTextElement } from '.';
+import type {
+  CustomEditorElementType,
+  CustomEditorTextElement,
+  ImageElement,
+} from '.';
 import type { ClassValue } from 'clsx';
 import type { Descendant, Node as SlateNode } from 'slate';
 import type { ReactEditor } from 'slate-react';
@@ -56,7 +60,7 @@ export const CustomEditorHelper = {
     editor.addMark('bold', true);
   },
   insertImage(editor: ReactEditor, url: string) {
-    const image: SlateNode & { url: string } = {
+    const image: SlateNode & ImageElement = {
       type: 'image',
       children: [{ text: '' }],
       url,
@@ -92,7 +96,7 @@ export function serializeHtml(node: Descendant): string {
     case 'code':
       return `<pre><code>${children}</code></pre>`;
     case 'image':
-      return `<img src=${node.url} />`;
+      return `<img src=${node.url} width="${node.width}" />`;
     default:
       return `<p>${children}</p>`;
   }
@@ -131,10 +135,15 @@ function breakdownElements(
     case 'IMG':
       if (element instanceof HTMLImageElement) {
         const url = element.getAttribute('src');
+        const width = element.getAttribute('width') || '300';
 
         return [
           jsx('element', { type: 'paragraph' }, [jsx('text', {}, '')]),
-          jsx('element', { ...nodeAttributes, type: 'image', url }, children),
+          jsx(
+            'element',
+            { ...nodeAttributes, type: 'image', url, width: Number(width) },
+            children,
+          ),
           jsx('element', { type: 'paragraph' }, [jsx('text', {}, '')]),
         ];
       }

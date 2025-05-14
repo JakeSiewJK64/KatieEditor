@@ -1,5 +1,6 @@
+import React from 'react';
 import { ImageElement } from 'editor';
-import { LuTrash } from 'react-icons/lu';
+import { LuMinus, LuPlus, LuTrash } from 'react-icons/lu';
 import { Transforms } from 'slate';
 import {
   ReactEditor,
@@ -25,10 +26,22 @@ export function CustomEditorLeaf(props: RenderLeafProps) {
 
 function CustomImageRenderElement({
   onDelete = () => {},
+  onSizeChange = () => {},
   ...props
-}: ImageElement & { onDelete: () => void }) {
+}: ImageElement & {
+  onDelete: () => void;
+  onSizeChange: (newSize: number) => void;
+}) {
+  const STEP = 20;
+  const [size, setSize] = React.useState(props.width || 300);
+
   const selected = useSelected();
   const focused = useFocused();
+
+  React.useEffect(() => {
+    onSizeChange(size);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [size]);
 
   return (
     <div
@@ -38,7 +51,23 @@ function CustomImageRenderElement({
       )}
       contentEditable={false}
     >
-      <div className="mb-1 flex flex-row items-center gap-1">
+      <div className="mb-1 flex flex-row items-center justify-between gap-1">
+        <div className="flex flex-row gap-1">
+          <button
+            title="Decrease width"
+            className="cursor-pointer rounded border border-slate-300 p-1"
+            onClick={() => setSize(prev => prev - STEP)}
+          >
+            <LuMinus />
+          </button>
+          <button
+            title="Increase width"
+            className="cursor-pointer rounded border border-slate-300 p-1"
+            onClick={() => setSize(prev => prev + STEP)}
+          >
+            <LuPlus />
+          </button>
+        </div>
         <button
           title="Remove image"
           className="cursor-pointer rounded border border-slate-300 p-1 text-red-600"
@@ -47,7 +76,7 @@ function CustomImageRenderElement({
           <LuTrash />
         </button>
       </div>
-      <img draggable={false} src={props.url} />
+      <img width={size} draggable={false} src={props.url} />
     </div>
   );
 }
@@ -66,6 +95,13 @@ export function CustomEditorRenderElement(props: RenderElementProps) {
       return (
         <CustomImageRenderElement
           {...props.element}
+          onSizeChange={newSize => {
+            Transforms.setNodes(
+              editor,
+              { ...props, width: newSize },
+              { at: ReactEditor.findPath(editor, props.element) },
+            );
+          }}
           onDelete={() => {
             Transforms.removeNodes(editor, {
               at: ReactEditor.findPath(editor, props.element),

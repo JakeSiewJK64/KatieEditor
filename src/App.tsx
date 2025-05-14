@@ -8,7 +8,7 @@ import type { Descendant } from 'slate';
 function DeserializeHtml() {
   const [value, setValue] = React.useState<Descendant[]>(
     deserialize(
-      '<img src="https://th.bing.com/th?id=ORMS.619350583d28c0fdd02328c89273585a&pid=Wdp&w=240&h=129&qlt=90&c=1&rs=1&dpr=0.800000011920929&p=0" />',
+      '<img width="150" src="https://th.bing.com/th?id=ORMS.619350583d28c0fdd02328c89273585a&pid=Wdp&w=240&h=129&qlt=90&c=1&rs=1&dpr=0.800000011920929&p=0" />',
     ),
   );
 

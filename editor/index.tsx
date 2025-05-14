@@ -20,6 +20,7 @@ export type StandardElement = CustomEditorElementBase & {
 export type ImageElement = CustomEditorElementBase & {
   type: 'image';
   url: string;
+  width?: number;
 };
 
 export type CustomEditorElement = ImageElement | StandardElement;
