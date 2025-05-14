@@ -107,11 +107,7 @@ export function CustomEditorRenderElement(props: RenderElementProps) {
             );
           }}
           onSizeChange={newSize => {
-            Transforms.setNodes(
-              editor,
-              { ...props, width: newSize },
-              { at: nodeIndex },
-            );
+            Transforms.setNodes(editor, { width: newSize }, { at: nodeIndex });
           }}
           onDelete={() => {
             Transforms.removeNodes(editor, {
